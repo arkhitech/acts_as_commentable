@@ -55,7 +55,11 @@ module Juixe
             end
             has_many :all_comments, { :as => :commentable, :dependent => :destroy, class_name: 'Comment' }.merge(join_options)
           else
-            has_many :comments, {:as => :commentable, :dependent => :destroy}.merge(join_options)
+            if !join_options.present?
+              has_many :comments, as: :commentable, dependent: :destroy
+            else
+              has_many :comments, {as: :commentable, dependent: :destroy}.merge(join_options)
+            end
           end
 
           comment_types.each do |role|
